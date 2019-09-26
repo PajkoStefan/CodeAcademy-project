@@ -4,6 +4,7 @@ function main() {
     let dataObject = new DataLayer();
     let deezerApi = new DeezerApi();
 
+    businessObject.getResolvedSongs();
     presentationObject.displayPageAlbums();
     // presentationObject.getAlbums(//howmuch);
 
@@ -102,7 +103,6 @@ function main() {
             cursor: "pointer"
         });
         console.log(event.target.textContent);
-        console.log("Pecati dobro e ");
         if (event.target.textContent === "Top 12 Albums") {
             console.log("dobro e");
             selMainBodyDivs.removeAttr('style');
@@ -112,7 +112,6 @@ function main() {
             presentationObject.displayNAlbums(12);
         }
         if(event.target.textContent === "Top 12 Songs"){
-            console.log("Pecati dobro e ");
             selMainBodyDivs.removeAttr('style');
             selMainBodyDivs.children().remove();
             selMainBody.children().remove();
@@ -123,7 +122,7 @@ function main() {
             selMainBodyDivs.removeAttr('style');
             selMainBodyDivs.children().remove();
             selMainBody.children().remove();
-            createDivBody(12);            console.log("Pecati dobro e ");
+            createDivBody(12);
 
         }
 

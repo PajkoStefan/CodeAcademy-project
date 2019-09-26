@@ -3,6 +3,8 @@ function DataLayer() {
 
     this.albums = [];
     this.albumsPage = [];
+    this.songs = []; // top 12 tracks
+
 
     let i;
 
@@ -46,6 +48,24 @@ function DataLayer() {
     // //   console.log(this.albumsPage);
 
     // console.log(this.persistanceObject.getAlbums());
+
+    this.populateSongs = async () => {
+
+        for (i = 0; i < 12; i++ ) {
+            const randomSong = getRandomNumber(200000, 199999999);
+            var temp = await this.persistanceObject.getSongs(randomSong);
+            var regex = /[0-9]+/;
+            if (String(temp.id).match(regex)) {
+                this.songs.push(temp);
+            } else {
+                i--;
+            }
+        }
+        console.log(this.songs);
+    };
+    this.getSongs = () =>{
+      return this.songs;
+    };
 
 }
 

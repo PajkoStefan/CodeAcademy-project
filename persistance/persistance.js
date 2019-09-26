@@ -20,6 +20,28 @@ function DeezerApi() {
 
     };
 
+    this.getSongs = (songname) => {
+        return new Promise((resolve, reject) => {
+            let cors = "https://cors-anywhere.herokuapp.com/";
+            $.ajax({
+                url:
+                    cors + 'https://api.deezer.com/track/' + songname,
+
+                type: "GET",
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (error) {
+                    reject(error);
+                }
+            });
+        });
+
+    };
+
+
+
+
 
 }
 
