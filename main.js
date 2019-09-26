@@ -96,17 +96,34 @@ function main() {
     var selMenuLeft = $('.menu-left');
     var selMainBodyDivs = $('.divMain');
     var selMainBody = $('#main-body');
+
     selMenuLeft.children().on('click', (event) => {
         selMenuLeft.css({
             cursor: "pointer"
         });
         console.log(event.target.textContent);
+        console.log("Pecati dobro e ");
         if (event.target.textContent === "Top 12 Albums") {
+            console.log("dobro e");
             selMainBodyDivs.removeAttr('style');
             selMainBodyDivs.children().remove();
             selMainBody.children().remove();
             createDivBody(12);
             presentationObject.displayNAlbums(12);
+        }
+        if(event.target.textContent === "Top 12 Songs"){
+            console.log("Pecati dobro e ");
+            selMainBodyDivs.removeAttr('style');
+            selMainBodyDivs.children().remove();
+            selMainBody.children().remove();
+            createDivBody(12);
+
+        }
+        else if(event.target.textContent === "Top 12 Artists"){
+            selMainBodyDivs.removeAttr('style');
+            selMainBodyDivs.children().remove();
+            selMainBody.children().remove();
+            createDivBody(12);            console.log("Pecati dobro e ");
 
         }
 
