@@ -34,6 +34,7 @@ function BusinessLayer() {
                     songLink: setAllSongs[i].link,
                     songDur:  setAllSongs[i].duration,
                     songRelDate:  setAllSongs[i].release_date,
+                    songPreview: setAllSongs[i].preview,
                     artistName:  setAllSongs[i].artist.name,
                     artistId: setAllSongs[i].artist.id,
                     albumName: setAllSongs[i].album.title,
@@ -99,9 +100,11 @@ function BusinessLayer() {
         await this.dataObject.populateSongs();
         var allSongs = this.dataObject.getSongs();
         getResSongs(allSongs);
-        console.log(this.resolvedSongs);
-
+        // console.log(this.resolvedSongs);
         // localStorage.setItem("DeezerApiData", JSON.stringify(this.resolvedAlbums));
+    };
+    this.returnResolvedSongs = () =>{
+      return this.resolvedSongs;
     };
 
 

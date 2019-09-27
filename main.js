@@ -4,7 +4,7 @@ function main() {
     let dataObject = new DataLayer();
     let deezerApi = new DeezerApi();
 
-    businessObject.getResolvedSongs();
+
     presentationObject.displayPageAlbums();
     // presentationObject.getAlbums(//howmuch);
 
@@ -104,28 +104,28 @@ function main() {
         });
         console.log(event.target.textContent);
         if (event.target.textContent === "Top 12 Albums") {
-            console.log("dobro e");
             selMainBodyDivs.removeAttr('style');
             selMainBodyDivs.children().remove();
             selMainBody.children().remove();
             createDivBody(12);
             presentationObject.displayNAlbums(12);
         }
-        if(event.target.textContent === "Top 12 Songs"){
+       else if(event.target.textContent === "Top 12 Songs"){
+            selMainBodyDivs.removeAttr('style');
+            selMainBodyDivs.children().remove();
+            selMainBody.children().remove();
+            createDivBody(12);
+            console.log("good");
+            presentationObject.displaySongs();
+
+        }
+       else if(event.target.textContent === "Top 12 Artists"){
             selMainBodyDivs.removeAttr('style');
             selMainBodyDivs.children().remove();
             selMainBody.children().remove();
             createDivBody(12);
 
-        }
-        else if(event.target.textContent === "Top 12 Artists"){
-            selMainBodyDivs.removeAttr('style');
-            selMainBodyDivs.children().remove();
-            selMainBody.children().remove();
-            createDivBody(12);
-
-        }
-
+       }
     });
 }
 
