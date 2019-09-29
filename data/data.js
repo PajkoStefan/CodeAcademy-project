@@ -4,7 +4,7 @@ function DataLayer() {
     this.albums = [];
     this.albumsPage = [];
     this.songs = []; // top 12 tracks
-
+    this.artists = [];
 
     let i;
 
@@ -19,6 +19,7 @@ function DataLayer() {
                 i--;
             }
         }
+        // console.log(this.albums);
     };
 
     this.getNAlbums = () => {
@@ -39,6 +40,7 @@ function DataLayer() {
                 i--;
             }
         }
+        // console.log(this.albumsPage);
     };
     this.getPageAlbums = () => {
         return this.albumsPage;
@@ -51,7 +53,7 @@ function DataLayer() {
 
     this.populateSongs = async () => {
 
-        for (i = 0; i < 12; i++ ) {
+        for (i = 0; i < 12; i++) {
             const randomSong = getRandomNumber(200000, 199999999);
             var temp = await this.persistanceObject.getSongs(randomSong);
             var regex = /[0-9]+/;
@@ -61,14 +63,51 @@ function DataLayer() {
                 i--;
             }
         }
-        console.log(this.songs);
-    };
-    this.getSongs = () =>{
-      return this.songs;
+        // console.log(this.songs);
     };
 
+    this.getSongs = () => {
+        return this.songs;
+    };
+
+    this.populateArtists = async () => {
+        this.artists = [];
+        for (i = 0; i < 12; i++) {
+            const randomArtist = getRandomNumber(1, 200);
+            var temp = await this.persistanceObject.getArtists(randomArtist);
+            var regex = /[0-9]+/;
+            if (this.artists.length === 0) {
+                if (String(temp.id).match(regex) && (temp.nb_album !== 0) && (temp.nb_fan !== 0)) {//nb_fan > 2000 - 3000 - 4000..
+                    this.artists.push(temp);
+                } else {
+                    i--;
+                }
+            } else {
+                if (String(temp.id).match(regex) && (temp.nb_album !== 0) && (temp.nb_fan !== 0)) {
+                    var flag = 0;
+
+                    for (var j = 0; j < this.artists.length; j++) {
+                        if (temp.id === this.artists[j].id) {
+                            flag = 1; // flag za povtoruvanje
+                            i--; // ako se povtoruva element
+                        }
+                    }
+                    if (flag === 0) {
+                        this.artists.push(temp);
+                    }
+                }
+                else{
+                    i--; // ako nema id
+                }
+            }
+
+        }
+        console.log(this.artists);
+    };
+    this.getArtists = () => {
+        return this.artists;
+    };
 }
-
 
 //podobruvanje da se proveri pri povikuvanje na traki, albumi
 //i slicno dali se povtoruvaat(mala verojatnost) .includes()

@@ -2,9 +2,11 @@ function BusinessLayer() {
     this.dataObject = new DataLayer();
     this.resolvedAlbums = [];
     this.resolvedSongs = [];
+    this.resolvedArtists = [];
 
-    let getResAlbums = (setAllAlbums) =>{
-        for (var i = 0; i < setAllAlbums.length; i++) {
+    let i;
+    let getResAlbums = (setAllAlbums) => {
+        for (i = 0; i < setAllAlbums.length; i++) {
             var temp = {
                 album: {
                     albumName: setAllAlbums[i].title,
@@ -25,17 +27,17 @@ function BusinessLayer() {
         }
     };
 
-    let getResSongs = (setAllSongs) =>{
-        for(var i = 0; i < setAllSongs.length; i++){
+    let getResSongs = (setAllSongs) => {
+        for (i = 0; i < setAllSongs.length; i++) {
             var temp = {
                 song: {
                     songName: setAllSongs[i].title,
                     songId: setAllSongs[i].id,
                     songLink: setAllSongs[i].link,
-                    songDur:  setAllSongs[i].duration,
-                    songRelDate:  setAllSongs[i].release_date,
+                    songDur: setAllSongs[i].duration,
+                    songRelDate: setAllSongs[i].release_date,
                     songPreview: setAllSongs[i].preview,
-                    artistName:  setAllSongs[i].artist.name,
+                    artistName: setAllSongs[i].artist.name,
                     artistId: setAllSongs[i].artist.id,
                     albumName: setAllSongs[i].album.title,
                     albumId: setAllSongs[i].album.id
@@ -45,6 +47,23 @@ function BusinessLayer() {
         }
 
     };
+    let getResArtists = (setAllArtists) => {
+        for (i = 0; i < setAllArtists.length; i++) {
+            var temp = {
+                artist: {
+                    artistName: setAllArtists[i].name,
+                    artistId: setAllArtists[i].id,
+                    artistLink: setAllArtists[i].link,
+                    artistPic: setAllArtists[i].picture_medium,
+                    artistFans: setAllArtists[i].nb_fan,
+                    artistAlbums: setAllArtists[i].nb_album
+                }
+            };
+            this.resolvedArtists.push(temp);
+        }
+
+    };
+
     this.getResolvedPageAlbums = async () => {
         await this.dataObject.populatePageAlbums();
         // console.log(this.dataObject.getPageAlbums());
@@ -85,7 +104,7 @@ function BusinessLayer() {
         //show albums, populateAlbums
 
         var allAlbums = this.dataObject.getNAlbums();
-        this.resolvedAlbums=[];
+        this.resolvedAlbums = [];
         getResAlbums(allAlbums);
         console.log(this.resolvedAlbums);
 
@@ -103,10 +122,47 @@ function BusinessLayer() {
         // console.log(this.resolvedSongs);
         // localStorage.setItem("DeezerApiData", JSON.stringify(this.resolvedAlbums));
     };
-    this.returnResolvedSongs = () =>{
-      return this.resolvedSongs;
+    this.returnResolvedSongs = () => {
+        return this.resolvedSongs;
+    };
+    let sortArtistsbyFans = (artists) => {
+        let arrayArtists = [...artists];
+        let array = [];
+        let temp1;
+        let temp2;
+        var j=0;
+        var p;
+        var ind;
+        let count = arrayArtists.length;
+        while (count) {
+            temp1 = arrayArtists[j];
+            ind = j;
+            for (p = (j + 1); p < arrayArtists.length; p++) {
+                temp2 = arrayArtists[p];
+                if (temp1.artist.artistFans < temp2.artist.artistFans) {
+                    temp1 = temp2;
+                    ind = p;
+                }
+            }
+            array.push(arrayArtists[ind]);
+            arrayArtists.splice(ind, 1);
+            count--;
+        }
+        console.log("sorted:");
+        console.log(array);
+        this.resolvedArtists = [];
+        this.resolvedArtists = array;
     };
 
+    this.getResolvedArtists = async () => {
+        await this.dataObject.populateArtists();
+        var allArtists = this.dataObject.getArtists();
+        getResArtists(allArtists);
+    };
+    this.returnResolvedArtists = () => {
+        sortArtistsbyFans(this.resolvedArtists);
+        return this.resolvedArtists;
+    };
 
 
 }

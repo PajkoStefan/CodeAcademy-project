@@ -7,7 +7,6 @@ function main() {
 
     presentationObject.displayPageAlbums();
     // presentationObject.getAlbums(//howmuch);
-
     let createDivBody = (numOfDivs) => {
         for (i = 1; i <= numOfDivs; i++) {
             var divBody2 = $("<div>");
@@ -115,7 +114,6 @@ function main() {
             selMainBodyDivs.children().remove();
             selMainBody.children().remove();
             createDivBody(12);
-            console.log("good");
             presentationObject.displaySongs();
 
         }
@@ -124,6 +122,7 @@ function main() {
             selMainBodyDivs.children().remove();
             selMainBody.children().remove();
             createDivBody(12);
+            presentationObject.displayArtists();
 
        }
     });

@@ -17,7 +17,7 @@ function PresentationLayer() {
             var index = (i - 1);
             var div1 = $(".div" + i);
             div1.css({
-                padding: "10px"
+                padding: "10px 10px 0 10px"
             });
             var p1 = $("<p>");
             var p2 = $("<p>");
@@ -63,13 +63,63 @@ function PresentationLayer() {
     };
 
 
+    let addArtists = (setArtistsDetails) => {
+        for (i = 1; i <= setArtistsDetails.length; i++) {
+            var index = (i - 1);
+            var div1 = $(".div" + i);
+            div1.css({
+                padding: "10px 10px 0 10px"
+            });
+            var p1 = $("<p>"); //artist name
+            var p2 = $("<p>"); // artists albums#
+            var p3 = $("<p>"); // artists fans#
+            var p4 = $("<p>"); // rate
+            var span1 = $("<span>");
+            var span2 = $("<span>");
+            var span3 = $("<span>");
+            var span4 = $("<span>");
+
+            var div2 = $("<div>");
+            div2.addClass("divImg");
+            var img = $("<img>");
+            img.attr({
+                class: "img img" + i,
+                src: setArtistsDetails[index].artist.artistPic
+            });
+            div2.append(img.css("cursor", "pointer"));
+            div1.append(div2);
+            span1.addClass("bold").text("Artist Name: ");
+            span2.addClass("bold").text("Album#: ");
+            span3.addClass("bold").text("Fans#: ");
+            span4.addClass("bold blue rateArtist" + i).text("*** Rate Artist ***");
+            p1.text(setArtistsDetails[index].artist.artistName);
+            p2.text(setArtistsDetails[index].artist.artistAlbums);
+            p3.text(setArtistsDetails[index].artist.artistFans);
+            p1.prepend(span1);
+            p2.prepend(span2);
+            p4.addClass("rate").append(span4.css("cursor", "pointer"));
+            p3.prepend(span3);
+            div2.before(p1, p2, p3);
+            div2.after(p4);
+            // console.log(setAlbumsDetails[index].tracks.tracks.length);
+        }
+        for (i = 1; i <= setArtistsDetails.length; i++) {
+            var selPic = $(".img" + i);
+            var rateArtist = $(".rateArtist" + i);
+            selPic.on('click', (event) => {
+                console.log("img: " + event.target.className.split(" ")[1]);
+            });
+        }
+        setEventOnRate(setArtistsDetails);
+    };
 
     let addSongs = (setSongsDetails) => {
         for(var i = 1; i <= setSongsDetails.length; i++) {
             var index = (i - 1);
             var div1 = $(".div" + i);
             div1.css({
-                padding: "10px"
+                justifyContent : "",
+                padding: "10px 10px 0 10px"
             });
             var p1 = $("<p>"); // artist name
             var p2 = $("<p>"); // album name
@@ -121,13 +171,6 @@ function PresentationLayer() {
             p4.prepend(span4);
             p5.prepend(span5);
             div2.before(p1, p2, p3, p4, p5);
-            var srcSong = "\"" + setSongsDetails[index].song.songLink + "\"";
-            // var img = $('<img>');
-            // img.attr({
-            //     class: "imgSong imgSong" + i,
-            //     src: setSongsDetails[index].song.songLink
-            // });
-            // div2.append(img);
             if(setSongsDetails[index].song.songPreview !== ""){
                 var audio = $('<audio />');
                 audio.attr({
@@ -149,7 +192,7 @@ function PresentationLayer() {
             div1.append(p6);
             span8.addClass("bold blue rateAlbum" + i).text("*** Rate album ***");
             p8.addClass("rate").append(span8.css("cursor", "pointer"));
-            div1.append(p8);
+            div1.append(p8.css("paddingTop" , "10px"));
             // div2.after(p3);
         }
         setEventOnRate(setSongsDetails);
@@ -160,7 +203,6 @@ function PresentationLayer() {
         await this.business.getResolvedPageAlbums();
         // console.log(this.resolvedAlbumData);
         var albumsDetails = this.business.getResolvedAlbums();
-        var mainBody = $("#main-body");
         addAlbums(albumsDetails);
 
 
@@ -235,6 +277,13 @@ function PresentationLayer() {
         var songsDetails = this.business.returnResolvedSongs();
         console.log(songsDetails);
         addSongs(songsDetails);
+    };
+
+    this.displayArtists = async () =>{
+      await this.business.getResolvedArtists();
+      var artistsDetails = this.business.returnResolvedArtists();
+      console.log(artistsDetails);
+      addArtists(artistsDetails);
     };
 
 

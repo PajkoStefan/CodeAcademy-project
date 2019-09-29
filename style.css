@@ -61,6 +61,7 @@ body #main-container{
 .list1, .list2, .list3 {
     width:70px;
     cursor: pointer;
+    color: gold;
 }
 .menu-left .list1, .list2{
     margin-right:5px;
@@ -96,6 +97,10 @@ body #main-container{
 }
 #main-body > div p.rate{
     text-align: center;
+
+}
+
+#main-body > div p.rate > span{
     font-size: 22px;
 }
 .divImg{

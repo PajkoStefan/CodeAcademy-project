@@ -38,6 +38,24 @@ function DeezerApi() {
         });
 
     };
+    this.getArtists = (artistname) => {
+        return new Promise((resolve, reject) => {
+            let cors = "https://cors-anywhere.herokuapp.com/";
+            $.ajax({
+                url:
+                    cors + 'https://api.deezer.com/artist/' + artistname,
+
+                type: "GET",
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (error) {
+                    reject(error);
+                }
+            });
+        });
+
+    };
 
 
 
