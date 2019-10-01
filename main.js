@@ -4,8 +4,9 @@ function main() {
     let dataObject = new DataLayer();
     let deezerApi = new DeezerApi();
 
+    presentationObject.displaySearch("eminem");
 
-    presentationObject.displayPageAlbums();
+    // presentationObject.displayPageAlbums();
     // presentationObject.getAlbums(//howmuch);
     let createDivBody = (numOfDivs) => {
         for (i = 1; i <= numOfDivs; i++) {
@@ -86,12 +87,12 @@ function main() {
     createDivBody(9);
 
     //event listener
-    inputField.on('click', (event) => {
-        console.log("la1");
+    inputField.on('keypress', (event) => {
+        if(event.key === "Enter")
+            presentationObject.displaySearch(inputField.val());
     });
-
     inputSearch.on('click', (event) => {
-        console.log("la2");
+        presentationObject.displaySearch(inputField.val());
     });
     var selMenuLeft = $('.menu-left');
     var selMainBodyDivs = $('.divMain');

@@ -3,6 +3,7 @@ function BusinessLayer() {
     this.resolvedAlbums = [];
     this.resolvedSongs = [];
     this.resolvedArtists = [];
+    this.resolvedSearch = [];
 
     let i;
     let getResAlbums = (setAllAlbums) => {
@@ -63,6 +64,7 @@ function BusinessLayer() {
         }
 
     };
+
 
     this.getResolvedPageAlbums = async () => {
         await this.dataObject.populatePageAlbums();
@@ -130,7 +132,7 @@ function BusinessLayer() {
         let array = [];
         let temp1;
         let temp2;
-        var j=0;
+        var j = 0;
         var p;
         var ind;
         let count = arrayArtists.length;
@@ -162,6 +164,65 @@ function BusinessLayer() {
     this.returnResolvedArtists = () => {
         sortArtistsbyFans(this.resolvedArtists);
         return this.resolvedArtists;
+    };
+
+    let checkSearch = (entered, checked) => {
+        if (entered.toLowerCase() === checked.toLowerCase())
+            return true;
+    };
+
+    let getResSearch = (setSearch, searchTerm) => {
+        for (i = 0; i < setSearch.data.length; i++) {
+
+            let ranking = getRandomNumber(1, 300);
+            let temp;
+
+            if (checkSearch(searchTerm, setSearch.data[i].title)) {
+                temp = {
+                    type: setSearch.data[i].type,
+                    id: setSearch.data[i].id,
+                    title: setSearch.data[i].title_short,
+                    link: setSearch.data[i].link,
+                    duration: setSearch.data[i].duration,
+                    rank: setSearch.data[i].rank,
+                    preview: setSearch.data[i].preview
+                };
+                this.resolvedSearch.push(temp);
+            } else if (checkSearch(searchTerm, setSearch.data[i].artist.name)) {
+                temp = {
+                    type: setSearch.data[i].artist.type,
+                    id: setSearch.data[i].artist.id,
+                    name: setSearch.data[i].artist.name,
+                    link: setSearch.data[i].artist.link,
+                    picture: setSearch.data[i].artist.picture_medium,
+                    rank: ranking
+                };
+                this.resolvedSearch.push(temp);
+                break;
+
+            } else if (checkSearch(searchTerm, setSearch.data[i].album.name)) {
+                 temp = {
+                    type: setSearch.data[i].album.type,
+                    id: setSearch.data[i].album.id,
+                    title: setSearch.data[i].album.title,
+                    link: 'https://api.deezer.com/album/' + setSearch.data[i].album.id,
+                    picture: setSearch.data[i].album.cover_medium,
+                    rank: ranking
+                };
+                this.resolvedSearch.push(temp);
+                break;
+            }
+
+        }
+    };
+
+    this.getResolvedSearch = async (searchTerm) => {
+        await this.dataObject.populateSearch(searchTerm);
+        var search = this.dataObject.getSearch();
+        getResSearch(search, searchTerm);
+    };
+    this.returnResolvedSearch = () => {
+        return this.resolvedSearch;
     };
 
 

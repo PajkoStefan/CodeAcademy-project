@@ -5,6 +5,7 @@ function DataLayer() {
     this.albumsPage = [];
     this.songs = []; // top 12 tracks
     this.artists = [];
+    this.search = [];
 
     let i;
 
@@ -106,6 +107,13 @@ function DataLayer() {
     };
     this.getArtists = () => {
         return this.artists;
+    };
+    this.populateSearch = async (searchTerm) =>{
+        this.search = await this.persistanceObject.getSearch(searchTerm);
+    };
+
+    this.getSearch = () =>{
+        return this.search;
     };
 }
 

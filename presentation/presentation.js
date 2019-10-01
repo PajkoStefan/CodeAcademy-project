@@ -279,11 +279,17 @@ function PresentationLayer() {
         addSongs(songsDetails);
     };
 
-    this.displayArtists = async () =>{
+    this.displayArtists = async () => {
       await this.business.getResolvedArtists();
       var artistsDetails = this.business.returnResolvedArtists();
       console.log(artistsDetails);
       addArtists(artistsDetails);
+    };
+
+    this.displaySearch = async (searchTerm) =>{
+        await this.business.getResolvedSearch(searchTerm);
+        var search = this.business.returnResolvedSearch();
+        // console.log(search);
     };
 
 
