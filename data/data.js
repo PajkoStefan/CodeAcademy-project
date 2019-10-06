@@ -110,6 +110,7 @@ function DataLayer() {
     };
     this.populateSearch = async (searchTerm) =>{
         this.search = await this.persistanceObject.getSearch(searchTerm);
+        console.log(this.search);
     };
 
     this.getSearch = () =>{

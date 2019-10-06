@@ -167,59 +167,89 @@ function BusinessLayer() {
     };
 
     let checkSearch = (entered, checked) => {
-        if (entered.toLowerCase() === checked.toLowerCase())
+        entered = entered.toLowerCase();
+        checked = checked.toLowerCase();
+        var temp1 = entered.substr(0, 4);
+        var temp2 = checked.substr(0, 4);
+        if (temp2.includes(temp1)) {
             return true;
-    };
-
-    let getResSearch = (setSearch, searchTerm) => {
-        for (i = 0; i < setSearch.data.length; i++) {
-
-            let ranking = getRandomNumber(1, 300);
-            let temp;
-
-            if (checkSearch(searchTerm, setSearch.data[i].title)) {
-                temp = {
-                    type: setSearch.data[i].type,
-                    id: setSearch.data[i].id,
-                    title: setSearch.data[i].title_short,
-                    link: setSearch.data[i].link,
-                    duration: setSearch.data[i].duration,
-                    rank: setSearch.data[i].rank,
-                    preview: setSearch.data[i].preview
-                };
-                this.resolvedSearch.push(temp);
-            } else if (checkSearch(searchTerm, setSearch.data[i].artist.name)) {
-                temp = {
-                    type: setSearch.data[i].artist.type,
-                    id: setSearch.data[i].artist.id,
-                    name: setSearch.data[i].artist.name,
-                    link: setSearch.data[i].artist.link,
-                    picture: setSearch.data[i].artist.picture_medium,
-                    rank: ranking
-                };
-                this.resolvedSearch.push(temp);
-                break;
-
-            } else if (checkSearch(searchTerm, setSearch.data[i].album.name)) {
-                 temp = {
-                    type: setSearch.data[i].album.type,
-                    id: setSearch.data[i].album.id,
-                    title: setSearch.data[i].album.title,
-                    link: 'https://api.deezer.com/album/' + setSearch.data[i].album.id,
-                    picture: setSearch.data[i].album.cover_medium,
-                    rank: ranking
-                };
-                this.resolvedSearch.push(temp);
-                break;
-            }
-
+        } else {
+            return false;
         }
     };
 
-    this.getResolvedSearch = async (searchTerm) => {
+    let getResSearch = (setSearch, searchTerm, typeSearch) => {
+        console.log(typeSearch);
+        console.log(searchTerm);
+        console.log(setSearch);
+
+        if (searchTerm && typeSearch === "Album") {
+            console.log("We are in Album");
+            for (i = 0; i < setSearch.data.length; i++) {
+                let ranking = getRandomNumber(1, 300);
+                let temp;
+                if (checkSearch(searchTerm, setSearch.data[i].album.title)) {
+                    temp = {
+                        type: setSearch.data[i].album.type,
+                        id: setSearch.data[i].album.id,
+                        artist: setSearch.data[i].artist.name,
+                        title: setSearch.data[i].album.title,
+                        link: 'https://api.deezer.com/album/' + setSearch.data[i].album.id,
+                        picture: setSearch.data[i].album.cover_medium,
+                        rank: ranking
+                    };
+                    this.resolvedSearch.push(temp);
+                    break;
+                }
+            }
+
+        } else if (searchTerm && typeSearch === "Artist") {
+            console.log("We are in artist");
+            for (i = 0; i < setSearch.data.length; i++) {
+                let temp;
+                if (checkSearch(searchTerm, setSearch.data[i].artist.name)) {
+                    temp = {
+                        type: setSearch.data[i].artist.type,
+                        id: setSearch.data[i].artist.id,
+                        name: setSearch.data[i].artist.name,
+                        link: setSearch.data[i].artist.link,
+                        picture: setSearch.data[i].artist.picture_medium
+                    };
+                    this.resolvedSearch.push(temp);
+                    console.log(temp);
+                    break;
+                }
+            }
+        } else if (searchTerm && typeSearch === "Song") {
+            console.log("We are in Song");
+            for (i = 0; i < setSearch.data.length; i++) {
+                let ranking = getRandomNumber(1, 300);
+                let temp;
+                if (checkSearch(searchTerm, setSearch.data[i].title)) {
+                    temp = {
+                        type: setSearch.data[i].type,
+                        id: setSearch.data[i].id,
+                        title: setSearch.data[i].title_short,
+                        link: setSearch.data[i].link,
+                        artist: setSearch.data[i].artist.name,
+                        album: setSearch.data[i].album.title,
+                        duration: setSearch.data[i].duration,
+                        rank: setSearch.data[i].rank,
+                        preview: setSearch.data[i].preview
+                    };
+                    this.resolvedSearch.push(temp);
+                    break;
+                }
+            }
+        }
+        console.log(this.resolvedSearch);
+    };
+
+    this.getResolvedSearch = async (searchTerm, typeSearch) => {
         await this.dataObject.populateSearch(searchTerm);
         var search = this.dataObject.getSearch();
-        getResSearch(search, searchTerm);
+        this.resolvedSearch = [];
+        getResSearch(search, searchTerm, typeSearch);
     };
     this.returnResolvedSearch = () => {
         return this.resolvedSearch;

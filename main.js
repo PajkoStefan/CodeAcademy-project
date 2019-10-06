@@ -4,7 +4,7 @@ function main() {
     let dataObject = new DataLayer();
     let deezerApi = new DeezerApi();
 
-    presentationObject.displaySearch("eminem");
+    // presentationObject.displaySearch("eminem");
 
     // presentationObject.displayPageAlbums();
     // presentationObject.getAlbums(//howmuch);
@@ -59,13 +59,38 @@ function main() {
     var divMenu3 = $('<div>');
     divMenu3.addClass("menu-right search");
     divMenu.append(divMenu3);
+    let inputSelect = $('<select>');
+    inputSelect.attr({
+        name: "type",
+        id: "input-select"
+    });
+    inputSelect.css({
+        "margin-right": "10px"
+    });
+    divMenu3.append(inputSelect);
+    var typeSearch = ["Artist", "Album", "Song"];
+    for (i = 0; i < 3; i++) {
+        var option = $('<option>');
+        if (i === 0) {
+            option.attr({
+                class : "type-search",
+                value: typeSearch[i]
+            });
+        } else {
+            option.attr({
+                class : "type-search",
+                value: typeSearch[i]
+            });
+        }
+        option.text(typeSearch[i]);
+        inputSelect.append(option);
+    }
     let inputField = $('<input>');
     inputField.attr({
         type: "text",
         placeholder: "Artist, Album, Track",
         class: "input-Field"
     });
-
     divMenu3.append(inputField);
     let inputSearch = $('<input>');
     inputSearch.attr({
@@ -87,45 +112,60 @@ function main() {
     createDivBody(9);
 
     //event listener
-    inputField.on('keypress', (event) => {
-        if(event.key === "Enter")
-            presentationObject.displaySearch(inputField.val());
-    });
-    inputSearch.on('click', (event) => {
-        presentationObject.displaySearch(inputField.val());
-    });
     var selMenuLeft = $('.menu-left');
     var selMainBodyDivs = $('.divMain');
     var selMainBody = $('#main-body');
+    var mainContainer = $('#main-container');
+    let searchDeleteDivs = () => {
+        selMainBodyDivs.removeAttr('style');
+        selMainBodyDivs.children().remove();
+        selMainBody.children().remove();
+        // mainContainer.css({
+        //     "max-height" : "100%",
+        //     overflow : "hidden"
+        // });
+    };
+
+    inputField.on('keypress', (event) => {
+        searchDeleteDivs();
+        createDivBody(1);
+        if (event.key === "Enter"){
+            var typeSearchVal = $('#input-select option:selected').text();
+            presentationObject.displaySearch(inputField.val(),typeSearchVal);
+        }
+    });
+    inputSearch.on('click', (event) => {
+        searchDeleteDivs();
+        createDivBody(1);
+        var typeSearchVal = $('#input-select option:selected').text();
+        presentationObject.displaySearch(inputField.val(), typeSearchVal);
+    });
 
     selMenuLeft.children().on('click', (event) => {
         selMenuLeft.css({
             cursor: "pointer"
         });
-        console.log(event.target.textContent);
         if (event.target.textContent === "Top 12 Albums") {
             selMainBodyDivs.removeAttr('style');
             selMainBodyDivs.children().remove();
             selMainBody.children().remove();
             createDivBody(12);
             presentationObject.displayNAlbums(12);
-        }
-       else if(event.target.textContent === "Top 12 Songs"){
+        } else if (event.target.textContent === "Top 12 Songs") {
             selMainBodyDivs.removeAttr('style');
             selMainBodyDivs.children().remove();
             selMainBody.children().remove();
             createDivBody(12);
             presentationObject.displaySongs();
 
-        }
-       else if(event.target.textContent === "Top 12 Artists"){
+        } else if (event.target.textContent === "Top 12 Artists") {
             selMainBodyDivs.removeAttr('style');
             selMainBodyDivs.children().remove();
             selMainBody.children().remove();
             createDivBody(12);
             presentationObject.displayArtists();
 
-       }
+        }
     });
 }
 

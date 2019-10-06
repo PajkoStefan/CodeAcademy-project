@@ -4,14 +4,16 @@ function PresentationLayer() {
 
     let body = $('body');
     let i;
-    let setEventOnRate = (setElement) =>{
+
+    let setEventOnRate = (setElement, classname) =>{
         for (i = 1; i <= setElement.length; i++) {
-            var rateAlbum = $(".rateAlbum" + i);
-            rateAlbum.on('click', (event) => {
+            var rate = $(".rate" + classname + i);
+            rate.on('click', (event) => {
                 console.log("rate: ");
             });
         }
     };
+
     let addAlbums = (setAlbumsDetails) => {
         for (i = 1; i <= setAlbumsDetails.length; i++) {
             var index = (i - 1);
@@ -39,7 +41,7 @@ function PresentationLayer() {
             div1.append(div2);
             span1.addClass("bold").text("Artist Name: ");
             span2.addClass("bold").text("Album Name: ");
-            span4.addClass("bold blue rateAlbum" + i).text("*** Rate album ***");
+            span4.addClass("bold blue rateAlbum" + i).text("*** Rate Album ***");
             span3.addClass("bold").text("Tracks#: ");
             p1.text(setAlbumsDetails[index].artist.artistName);
             p2.text(setAlbumsDetails[index].album.albumName);
@@ -59,9 +61,8 @@ function PresentationLayer() {
                 console.log("img: " + event.target.className.split(" ")[1]);
             });
         }
-        setEventOnRate(setAlbumsDetails);
+        setEventOnRate(setAlbumsDetails,"Album");
     };
-
 
     let addArtists = (setArtistsDetails) => {
         for (i = 1; i <= setArtistsDetails.length; i++) {
@@ -143,7 +144,6 @@ function PresentationLayer() {
             div2.css({
                 padding : "10px 0"
             });
-            div2.append();
             div1.append(div2);
             span1.addClass("bold").text("Artist Name: ");
             span2.addClass("bold").text("Album Name: ");
@@ -190,15 +190,14 @@ function PresentationLayer() {
                 div2.append(p7);
             }
             div1.append(p6);
-            span8.addClass("bold blue rateAlbum" + i).text("*** Rate album ***");
+            span8.addClass("bold blue rateSong" + i).text("*** Rate Song ***");
             p8.addClass("rate").append(span8.css("cursor", "pointer"));
             div1.append(p8.css("paddingTop" , "10px"));
             // div2.after(p3);
         }
-        setEventOnRate(setSongsDetails);
+        setEventOnRate(setSongsDetails, "Song");
     };
-    // console.log(this.business.getPageAlbums());
-    // console.log(this.business.getAlbums());
+
     this.displayPageAlbums = async () => {
         await this.business.getResolvedPageAlbums();
         // console.log(this.resolvedAlbumData);
@@ -285,11 +284,213 @@ function PresentationLayer() {
       console.log(artistsDetails);
       addArtists(artistsDetails);
     };
+    let addSearchResult = (setSearchDetails) => {
 
-    this.displaySearch = async (searchTerm) =>{
-        await this.business.getResolvedSearch(searchTerm);
+        var index = 0;
+
+        if(setSearchDetails[index] && setSearchDetails[index].type === "artist"){
+            console.log("artist");
+            var div1 = $(".div1");
+            div1.css({
+                padding: "50px 0px",
+                width: "100%"
+            });
+            var p1 = $("<p>");
+            var p2 = $("<p>");
+            var p3 = $("<p>");
+            var p4 = $("<p>");
+            var span1 = $("<span>");
+            var span2 = $("<span>");
+            var span3 = $("<span>");
+            var span4 = $("<span>");
+
+            var div2 = $("<div>");
+            div2.addClass("divImg");
+            var img = $("<img>");
+            img.attr({
+                class: "img img1",
+                src: setSearchDetails[index].picture
+            });
+            div2.append(img.css("cursor", "pointer"));
+            div1.append(div2);
+            span1.addClass("bold").text("Artist Name: ");
+            span2.addClass("bold").text("Rank: ");
+            span3.addClass("bold").text("Link: ");
+            span4.addClass("bold blue rateArtist1").text("*** Rate Artist***");
+            p1.text(setSearchDetails[index].name);
+            p2.text(setSearchDetails[index].id);
+            p3.text(setSearchDetails[index].link);
+            p1.prepend(span1);
+            p2.prepend(span2);
+            p3.prepend(span3);
+            p4.addClass("rate").append(span4.css("cursor", "pointer"));
+            div2.before(p1, p2, p3);
+            div2.after(p4);
+            div1.children().css({
+                "text-align" : "center"
+            });
+            // console.log(setAlbumsDetails[index].tracks.tracks.length);
+
+
+            var selPic = $(".img1");
+            selPic.on('click', (event) => {
+                console.log("img: " + event.target.className.split(" ")[1]);
+            });
+        }
+        else if(setSearchDetails[index] && setSearchDetails[index].type === "album"){
+            var div1 = $(".div1");
+            div1.css({
+                padding: "50px 0px",
+                width: "100%",
+            });
+            var p1 = $("<p>");
+            var p2 = $("<p>");
+            var p3 = $("<p>");
+            var p4 = $("<p>");
+            var p5 = $("<p>");
+            var span1 = $("<span>");
+            var span2 = $("<span>");
+            var span3 = $("<span>");
+            var span4 = $("<span>");
+            var span5 = $("<span>");
+
+            var div2 = $("<div>");
+            div2.addClass("divImg");
+            var img = $("<img>");
+            img.attr({
+                class: "img img1",
+                src: setSearchDetails[index].picture
+            });
+            div2.append(img.css("cursor", "pointer"));
+            div1.append(div2);
+            span1.addClass("bold").text("Album Name: ");
+            span2.addClass("bold").text("Artist Name: ");
+            span3.addClass("bold").text("Album Link: ");
+            span4.addClass("bold").text("Rank: ");
+            span5.addClass("bold blue rateAlbum1    ").text("*** Rate Album***");
+            p1.text(setSearchDetails[index].title);
+            p2.text(setSearchDetails[index].artist);
+            p3.text(setSearchDetails[index].link);
+            p4.text(setSearchDetails[index].rank);
+
+            p1.prepend(span1);
+            p2.prepend(span2);
+            p3.prepend(span3);
+            p4.prepend(span4);
+            p5.addClass("rate").append(span5.css("cursor", "pointer"));
+            div2.before(p1, p2, p3, p4);
+            div2.after(p5);
+            div1.children().css({
+                "text-align" : "center"
+            });
+            // console.log(setAlbumsDetails[index].tracks.tracks.length);
+
+
+            var selPic = $(".img1");
+            selPic.on('click', (event) => {
+                console.log("img: " + event.target.className.split(" ")[1]);
+            });
+        }
+        else if(setSearchDetails[index] && setSearchDetails[index].type === "track"){
+            var div1 = $(".div1");
+            div1.css({
+                padding: "50px 0px",
+                width: "100%"
+            });
+            var p1 = $("<p>");
+            var p2 = $("<p>");
+            var p3 = $("<p>");
+            var p4 = $("<p>");
+            var p5 = $("<p>");
+            var p6 = $("<p>");
+            var p7 = $("<p>");
+            var p8 = $("<p>");
+
+            var span1 = $("<span>");
+            var span2 = $("<span>");
+            var span3 = $("<span>");
+            var span4 = $("<span>");
+            var span5 = $("<span>");
+            var span6 = $("<span>");
+            var span7 = $("<span>");
+
+            var div2 = $("<div>");
+            div2.addClass("divSong");
+            div2.css({
+                padding : "10px 0"
+            });
+            div1.append(div2);
+            span1.addClass("bold").text("Song Name: ");
+            span2.addClass("bold").text("Artist Name: ");
+            span3.addClass("bold").text("Album Name: ");
+            span4.addClass("bold").text("Link: ");
+            span5.addClass("bold").text("Duration: ");
+            span6.addClass("bold").text("Rank: ");
+            span7.addClass("bold blue rateSong1    ").text("*** Rate Song***");
+            p1.text(setSearchDetails[index].title);
+            p2.text(setSearchDetails[index].artist);
+            p3.text(setSearchDetails[index].album);
+            p4.text(setSearchDetails[index].link);
+            p5.text(setSearchDetails[index].duration);
+            p6.text(setSearchDetails[index].rank);
+            p1.prepend(span1);
+            p2.prepend(span2);
+            p3.prepend(span3);
+            p4.prepend(span4);
+            p5.prepend(span5);
+            p6.prepend(span6);
+            p7.addClass("rate").append(span7.css("cursor", "pointer"));
+            div2.before(p1, p2, p3, p4, p5, p6);
+            // console.log(setAlbumsDetails[index].tracks.tracks.length);
+            div1.children().css({
+                "text-align" : "center"
+            });
+            if(setSearchDetails[index].preview !== ""){
+                var audio = $('<audio />');
+                audio.attr({
+                    controls : "true",
+                    class : "audioPreview"
+                });
+                var source = $('<source />');
+                source.attr({
+                    src : setSearchDetails[index].preview,
+                    type : "audio/mpeg"
+                });
+                audio.append(source);
+                div2.append(audio);
+            }
+            else{
+                p8.addClass("bold red").css("fontSize" , "20px").text("Preview for this track is not available!");
+                div2.append(p8);
+            }
+
+            // div2.after(p3);
+
+            var selPic = $(".img1");
+            selPic.on('click', (event) => {
+                console.log("img: " + event.target.className.split(" ")[1]);
+            });
+        }
+        console.log(setSearchDetails[index]);
+        if(setSearchDetails[index]){
+            var classname = setSearchDetails[index].type;
+            console.log(classname);
+            classname = classname.charAt(0).toUpperCase() + classname.slice(1);
+            console.log(classname);
+            setEventOnRate(setSearchDetails, classname);
+        }
+        else{
+            var div1 = $(".div1");
+            var p1 = $("<p>");
+            p1.text("Track not found! Try Again");
+            div1.append(p1);
+        }
+    };
+    this.displaySearch = async (searchTerm, typeSearch) => {
+        await this.business.getResolvedSearch(searchTerm, typeSearch);
         var search = this.business.returnResolvedSearch();
-        // console.log(search);
+        console.log(search);
+        addSearchResult(search);
     };
 
 
