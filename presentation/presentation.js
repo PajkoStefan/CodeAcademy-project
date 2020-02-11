@@ -5,11 +5,94 @@ function PresentationLayer() {
     let body = $('body');
     let i;
 
-    let setEventOnRate = (setElement, classname) =>{
+    let checkEnterFromRateInput = (rate, selRate) => {
+        if (!(rate.length === 1)) {
+            selRate.val("");
+        }
+        else {
+            if (!(parseInt(rate) >= 1 && parseInt(rate) <= 5 )) {
+                selRate.val("");
+            }
+        }
+    };
+    let setEventOnRate = (setElement, classname) => {
         for (i = 1; i <= setElement.length; i++) {
             var rate = $(".rate" + classname + i);
+            var div1 = $('.div' + i);
+            var divDiv1 = $('<div>');
+            var mainBody = $('#main-body');
             rate.on('click', (event) => {
-                console.log("rate: ");
+                rate.remove();
+                divDiv1.append(div1.children());
+                divDiv1.addClass("displayFlex rateLeft").css({
+                    "justify-content": "center",
+                    "align-items": "center",
+                    "flex-direction": "column",
+                    width: "50%"
+                });
+
+                div1.prepend(divDiv1);
+                div1.css({
+                    "flex-direction": "row"
+                });
+
+                div1.addClass("displayFlex");
+                rate.css({
+                    "font-size": "30px"
+                });
+                var divReview = $('<div>');
+                console.log(divReview.remove());
+                divReview.css({
+                    width: "50%",
+                    padding: "0 15px"
+                });
+                var p1 = $('<p>');
+                p1.css({
+                    "font-size": "left",
+                    "padding-left": "30px",
+                    "margin-bottom": "5px"
+
+                }).text("Review: ");
+                var textarea = $('<textarea>');
+                textarea.css({
+                    width: "100%",
+                    "border-radius": "10px",
+                    "padding": "10px 5px",
+                    "font-size": "16px"
+                }).attr({
+                    rows: "5"
+                });
+                var inputRate = $('<input>');
+                inputRate.css({
+                    width: "50px",
+                    "text-align": "center",
+                    "margin-bottom": "10px"
+                }).attr({
+                    type: "text",
+                    placeholder: "1-5",
+                    class: "inputRate"
+                });
+
+                inputRate.on('keyup', (event) => {
+                    var selRate = $('.inputRate');
+                    checkEnterFromRateInput(selRate.val(), selRate);
+                });
+                var inputRateSubmit = $('<input>');
+
+                inputRateSubmit.css({
+                    "border-radius": "10px",
+                    padding: "5px 10px",
+                    "margin-top" : "10px",
+                    "margin-left" : "10px",
+                    border: "none",
+                    "background-color": "#ff791a"
+                }).attr({
+                    type: "submit"
+                });
+                div1.append(inputRate);
+                divReview.append(p1, textarea, inputRate, inputRateSubmit);
+                div1.append(divReview);
+
             });
         }
     };
@@ -61,7 +144,7 @@ function PresentationLayer() {
                 console.log("img: " + event.target.className.split(" ")[1]);
             });
         }
-        setEventOnRate(setAlbumsDetails,"Album");
+        setEventOnRate(setAlbumsDetails, "Album");
     };
 
     let addArtists = (setArtistsDetails) => {
@@ -115,11 +198,11 @@ function PresentationLayer() {
     };
 
     let addSongs = (setSongsDetails) => {
-        for(var i = 1; i <= setSongsDetails.length; i++) {
+        for (var i = 1; i <= setSongsDetails.length; i++) {
             var index = (i - 1);
             var div1 = $(".div" + i);
             div1.css({
-                justifyContent : "",
+                justifyContent: "",
                 padding: "10px 10px 0 10px"
             });
             var p1 = $("<p>"); // artist name
@@ -142,7 +225,7 @@ function PresentationLayer() {
             var div2 = $("<div>");
             div2.addClass("divSong");
             div2.css({
-                padding : "10px 0"
+                padding: "10px 0"
             });
             div1.append(div2);
             span1.addClass("bold").text("Artist Name: ");
@@ -151,11 +234,11 @@ function PresentationLayer() {
             span4.addClass("bold").text("Release Date: ");
             span5.addClass("bold").text("Duration: ");
             aTag.attr({
-                href : setSongsDetails[index].song.songLink,
-                class : "bold blue"
+                href: setSongsDetails[index].song.songLink,
+                class: "bold blue"
             }).css({
-                "text-decoration" : "none",
-                "font-size" : "20px"
+                "text-decoration": "none",
+                "font-size": "20px"
             }).text("Here!");
             span6.append(aTag);
             p1.text(setSongsDetails[index].song.artistName);
@@ -171,28 +254,27 @@ function PresentationLayer() {
             p4.prepend(span4);
             p5.prepend(span5);
             div2.before(p1, p2, p3, p4, p5);
-            if(setSongsDetails[index].song.songPreview !== ""){
+            if (setSongsDetails[index].song.songPreview !== "") {
                 var audio = $('<audio />');
                 audio.attr({
-                   controls : "true",
-                   class : "audioPreview"
+                    controls: "true",
+                    class: "audioPreview"
                 });
                 var source = $('<source />');
                 source.attr({
-                    src : setSongsDetails[index].song.songPreview,
-                    type : "audio/mpeg"
+                    src: setSongsDetails[index].song.songPreview,
+                    type: "audio/mpeg"
                 });
                 audio.append(source);
                 div2.append(audio);
-            }
-            else{
-                p7.addClass("bold red").css("fontSize" , "20px").text("Preview for this track is not available!");
+            } else {
+                p7.addClass("bold red").css("fontSize", "20px").text("Preview for this track is not available!");
                 div2.append(p7);
             }
             div1.append(p6);
             span8.addClass("bold blue rateSong" + i).text("*** Rate Song ***");
             p8.addClass("rate").append(span8.css("cursor", "pointer"));
-            div1.append(p8.css("paddingTop" , "10px"));
+            div1.append(p8.css("paddingTop", "10px"));
             // div2.after(p3);
         }
         setEventOnRate(setSongsDetails, "Song");
@@ -279,16 +361,16 @@ function PresentationLayer() {
     };
 
     this.displayArtists = async () => {
-      await this.business.getResolvedArtists();
-      var artistsDetails = this.business.returnResolvedArtists();
-      console.log(artistsDetails);
-      addArtists(artistsDetails);
+        await this.business.getResolvedArtists();
+        var artistsDetails = this.business.returnResolvedArtists();
+        console.log(artistsDetails);
+        addArtists(artistsDetails);
     };
     let addSearchResult = (setSearchDetails) => {
 
         var index = 0;
 
-        if(setSearchDetails[index] && setSearchDetails[index].type === "artist"){
+        if (setSearchDetails[index] && setSearchDetails[index].type === "artist") {
             console.log("artist");
             var div1 = $(".div1");
             div1.css({
@@ -327,7 +409,7 @@ function PresentationLayer() {
             div2.before(p1, p2, p3);
             div2.after(p4);
             div1.children().css({
-                "text-align" : "center"
+                "text-align": "center"
             });
             // console.log(setAlbumsDetails[index].tracks.tracks.length);
 
@@ -336,8 +418,7 @@ function PresentationLayer() {
             selPic.on('click', (event) => {
                 console.log("img: " + event.target.className.split(" ")[1]);
             });
-        }
-        else if(setSearchDetails[index] && setSearchDetails[index].type === "album"){
+        } else if (setSearchDetails[index] && setSearchDetails[index].type === "album") {
             var div1 = $(".div1");
             div1.css({
                 padding: "50px 0px",
@@ -381,7 +462,7 @@ function PresentationLayer() {
             div2.before(p1, p2, p3, p4);
             div2.after(p5);
             div1.children().css({
-                "text-align" : "center"
+                "text-align": "center"
             });
             // console.log(setAlbumsDetails[index].tracks.tracks.length);
 
@@ -390,8 +471,7 @@ function PresentationLayer() {
             selPic.on('click', (event) => {
                 console.log("img: " + event.target.className.split(" ")[1]);
             });
-        }
-        else if(setSearchDetails[index] && setSearchDetails[index].type === "track"){
+        } else if (setSearchDetails[index] && setSearchDetails[index].type === "track") {
             var div1 = $(".div1");
             div1.css({
                 padding: "50px 0px",
@@ -417,7 +497,7 @@ function PresentationLayer() {
             var div2 = $("<div>");
             div2.addClass("divSong");
             div2.css({
-                padding : "10px 0"
+                padding: "10px 0"
             });
             div1.append(div2);
             span1.addClass("bold").text("Song Name: ");
@@ -443,24 +523,23 @@ function PresentationLayer() {
             div2.before(p1, p2, p3, p4, p5, p6);
             // console.log(setAlbumsDetails[index].tracks.tracks.length);
             div1.children().css({
-                "text-align" : "center"
+                "text-align": "center"
             });
-            if(setSearchDetails[index].preview !== ""){
+            if (setSearchDetails[index].preview !== "") {
                 var audio = $('<audio />');
                 audio.attr({
-                    controls : "true",
-                    class : "audioPreview"
+                    controls: "true",
+                    class: "audioPreview"
                 });
                 var source = $('<source />');
                 source.attr({
-                    src : setSearchDetails[index].preview,
-                    type : "audio/mpeg"
+                    src: setSearchDetails[index].preview,
+                    type: "audio/mpeg"
                 });
                 audio.append(source);
                 div2.append(audio);
-            }
-            else{
-                p8.addClass("bold red").css("fontSize" , "20px").text("Preview for this track is not available!");
+            } else {
+                p8.addClass("bold red").css("fontSize", "20px").text("Preview for this track is not available!");
                 div2.append(p8);
             }
 
@@ -472,17 +551,24 @@ function PresentationLayer() {
             });
         }
         console.log(setSearchDetails[index]);
-        if(setSearchDetails[index]){
+        if (setSearchDetails[index]) {
             var classname = setSearchDetails[index].type;
             console.log(classname);
             classname = classname.charAt(0).toUpperCase() + classname.slice(1);
             console.log(classname);
             setEventOnRate(setSearchDetails, classname);
-        }
-        else{
+        } else {
             var div1 = $(".div1");
             var p1 = $("<p>");
-            p1.text("Track not found! Try Again");
+            div1.removeAttr("style");
+            div1.css({
+                padding: "50px 0px",
+                width: "100%"
+            });
+            p1.css({
+                "text-align": "center",
+                "font-size": "25px"
+            }).addClass("red").text("Not found! Try Again");
             div1.append(p1);
         }
     };
@@ -492,7 +578,6 @@ function PresentationLayer() {
         console.log(search);
         addSearchResult(search);
     };
-
 
 
 }

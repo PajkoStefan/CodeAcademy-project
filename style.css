@@ -38,9 +38,31 @@ body #main-container{
     font-size:2.5em;
 
 }
-.nav-menu{
+.log-reg{
+    width: 100%;
     background-color: #332a26;
-    margin-top:20px;
+    padding:10px;
+    margin-top: 20px;
+}
+.log-reg .container.logreg-nav{
+    justify-content: flex-end;
+}
+.logreg-nav .username, .password{
+    width:150px;
+    padding: 0 5px;
+}
+.logreg-nav .password{
+    margin: 0 5px;
+}
+.logreg-nav .userLogin, .userSignup{
+    padding: 5px 10px;
+    margin-right:5px;
+    border: none;
+    border-radius: 10px;
+    background-color: #ff791a;
+}
+.nav-menu{
+    background-color: #da6d3c;
 }
 #menu{
     padding:5px;
@@ -117,4 +139,10 @@ body #main-container{
     object-fit : contain;
     border-radius: 20px;
     border: 1px dotted blue;
+}
+
+#input-select{
+    margin: 0 10px;
+    padding: 5px;
+    border-radius: 10px;
 }

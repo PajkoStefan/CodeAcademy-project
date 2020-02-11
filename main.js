@@ -1,8 +1,6 @@
 function main() {
-    let businessObject = new BusinessLayer();
     let presentationObject = new PresentationLayer();
-    let dataObject = new DataLayer();
-    let deezerApi = new DeezerApi();
+
 
     // presentationObject.displaySearch("eminem");
 
@@ -39,6 +37,57 @@ function main() {
     var h1 = $('<h1>');
     h1.attr("id", "main-title").text("RateAlert");
     divContainer1.append(h1);
+    let user = $('<div>');
+    user.addClass("log-reg");
+    let username = $('<input>');
+    let password = $('<input>');
+    let userLogin = $('<input>');
+    let userSignup = $('<input>');
+    username.addClass("username").attr({
+        type: "text",
+        placeholder: "Username"
+    }).css({
+    });
+    password.addClass("password").attr({
+        type: "password",
+        placeholder: "Password"
+    }).css({
+
+    });
+    userLogin.addClass("userLogin").attr({
+        type: "submit",
+        value: "login"
+    });
+    userSignup.addClass("userSignup").attr({
+        type: "submit",
+        value: "SignUp"
+    });
+    let divContainerLogReg = $('<div>').addClass("container");
+    divMainContainer.append(user);
+    divContainerLogReg.addClass("displayFlex logreg-nav");
+    user.append(divContainerLogReg);
+    divContainerLogReg.append(username,password,userLogin,userSignup);
+    //log-reg eventlistener
+    let selLogin = $('.userLogin');
+    let selSignup = $('.userSignup');
+    let selUsername = $('.username');
+    let selPassword = $('.password');
+
+    selUsername.on("click", (event) => {
+        console.log("la1");
+    });
+    selPassword.on("click", (event) => {
+        console.log("la2");
+
+    });
+    selLogin.on("click", (event) => {
+        console.log("la3");
+
+    });
+    selSignup.on("click", (event) => {
+        console.log("la4");
+
+    });
     let navMenu = $('<div>');
     navMenu.addClass("nav-menu");
     divMainContainer.append(navMenu);
@@ -59,14 +108,19 @@ function main() {
     var divMenu3 = $('<div>');
     divMenu3.addClass("menu-right search");
     divMenu.append(divMenu3);
+    let inputField = $('<input>');
+    inputField.attr({
+        type: "text",
+        placeholder: "Artist, Album, Track",
+        class: "input-Field"
+    });
+    divMenu3.append(inputField);
     let inputSelect = $('<select>');
     inputSelect.attr({
         name: "type",
         id: "input-select"
     });
-    inputSelect.css({
-        "margin-right": "10px"
-    });
+
     divMenu3.append(inputSelect);
     var typeSearch = ["Artist", "Album", "Song"];
     for (i = 0; i < 3; i++) {
@@ -85,13 +139,6 @@ function main() {
         option.text(typeSearch[i]);
         inputSelect.append(option);
     }
-    let inputField = $('<input>');
-    inputField.attr({
-        type: "text",
-        placeholder: "Artist, Album, Track",
-        class: "input-Field"
-    });
-    divMenu3.append(inputField);
     let inputSearch = $('<input>');
     inputSearch.attr({
         type: "button",
